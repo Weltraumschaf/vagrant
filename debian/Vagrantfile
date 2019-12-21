@@ -3,21 +3,36 @@
 
 # https://manski.net/2016/09/vagrant-multi-machine-tutorial/
 
-BOX_IMAGE = "bento/debian-9"
-
 Vagrant.configure("2") do |config|
-  config.vm.define "master" do |subconfig|
-    subconfig.vm.box = BOX_IMAGE
-    subconfig.vm.hostname = "debian"
-    subconfig.vm.network :private_network, ip: "10.0.0.10"
-  end
+
+  config.vm.box = "debian/buster64"
+  config.vm.hostname = "debian"
+  # config.vm.network :private_network, ip: "10.0.0.10"
 
   config.vm.provision "shell", inline: <<-SHELL
+    export DEBIAN_FRONTEND="noninteractive"
     apt-get update
     apt-get upgrade -y
     apt-get install -y \
         curl \
         tmux \
         git
+  SHELL
+
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    (
+      mkdir -p "${HOME}/src"
+      cd "${HOME}/src"
+      git clone https://github.com/Weltraumschaf/dotfiles.git
+      git clone https://github.com/Weltraumschaf/shell-scripts.git
+    )
+    (
+      cd "${HOME}/src/dotfiles"
+      ./install.sh
+    )
+    (
+      cd "${HOME}/src/shell-scripts"
+      ./install.sh
+    )
   SHELL
 end
