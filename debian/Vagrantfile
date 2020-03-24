@@ -14,9 +14,19 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get upgrade -y
     apt-get install -y \
-        curl \
+        locales \
+        git \
         tmux \
-        git
+        apt-file \
+        build-essential \
+        file \
+        coreutils \
+        man \
+        ltrace \
+        nano \
+        gdb \
+        curl
+    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
   SHELL
 
   config.vm.provision "shell", privileged: false, inline: <<-SHELL
