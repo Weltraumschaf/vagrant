@@ -1,15 +1,14 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
 Vagrant.configure("2") do |config|
-  config.vm.box = "win10"
-  config.vm.hostname = "win10"
-  config.vm.guest = :windows
-  config.vm.communicator = "winrm"
-  
-  config.vm.provider "virtualbox" do |vb|
-    # Display the VirtualBox GUI when booting the machine
-    vb.gui = true
-    vb.memory = "8192"
-  end
+    config.vagrant.plugins = ["vagrant-vbguest"]
+    
+    config.vm.box = "win10"
+    config.vm.hostname = "win10"
+    config.vm.guest = :windows
+    config.vm.communicator = "winrm"
+
+    config.vm.provider "virtualbox" do |vb|
+        # Display the VirtualBox GUI when booting the machine
+        vb.gui = true
+        vb.memory = "8192"
+    end
 end

@@ -1,34 +1,34 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
 Vagrant.configure("2") do |config|
-  # https://www.kali.org/news/announcing-kali-for-vagrant/
+    # https://www.kali.org/news/announcing-kali-for-vagrant/
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "kalilinux/rolling"
-  # config.vm.box_check_update = false
-  config.vm.hostname = "kali"
+    config.vagrant.plugins = ["vagrant-vbguest"]
 
-  config.vm.provider "virtualbox" do |vb|
-    # Display the VirtualBox GUI when booting the machine
-    vb.gui = true
-    vb.memory = "4096"
-  end
+    # Every Vagrant development environment requires a box. You can search for
+    # boxes at https://vagrantcloud.com/search.
+    config.vm.box = "kalilinux/rolling"
+    # config.vm.box_check_update = false
+    config.vm.hostname = "kali"
 
-  # https://stackoverflow.com/questions/18878117/using-vagrant-to-run-virtual-machines-with-desktop-environment
-  config.vm.provision "shell", inline: <<-SHELL
-    export DEBIAN_FRONTEND="noninteractive"
-    apt-get update
-    apt-get upgrade -y
-    apt-get install -y \
-      virtualbox-guest-dkms \
-      virtualbox-guest-utils \
-      virtualbox-guest-x11
-    VBoxClient --clipboard
-    VBoxClient --draganddrop
-    VBoxClient --display
-    VBoxClient --checkhostversion
-    VBoxClient --seamless
-  SHELL
+    config.vm.provider "virtualbox" do |vb|
+        # Display the VirtualBox GUI when booting the machine
+        vb.gui = true
+        vb.memory = "4096"
+    end
+
+    # https://stackoverflow.com/questions/18878117/using-vagrant-to-run-virtual-machines-with-desktop-environment
+    config.vm.provision "shell", inline: <<-SHELL
+        export DEBIAN_FRONTEND="noninteractive"
+        apt-get update
+        apt-get upgrade -y
+        apt-get install -y \
+            virtualbox-guest-dkms \
+            virtualbox-guest-utils \
+            virtualbox-guest-x11
+
+        VBoxClient --clipboard
+        VBoxClient --draganddrop
+        VBoxClient --display
+        VBoxClient --checkhostversion
+        VBoxClient --seamless
+    SHELL
 end

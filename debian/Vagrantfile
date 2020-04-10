@@ -1,48 +1,50 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
-# https://manski.net/2016/09/vagrant-multi-machine-tutorial/
-
 Vagrant.configure("2") do |config|
+    config.vagrant.plugins = ["vagrant-vbguest"]
 
-  config.vm.box = "debian/buster64"
-  config.vm.hostname = "debian"
-  config.vm.synced_folder ENV["HOME"], '/home/vagrant/host'
+    config.vm.box = "debian/buster64"
+    config.vm.hostname = "debian"
+    config.vm.synced_folder ENV["HOME"], '/home/vagrant/host'
 
-  config.vm.provision "shell", inline: <<-SHELL
-    export DEBIAN_FRONTEND="noninteractive"
-    apt-get update
-    apt-get upgrade -y
-    apt-get install -y \
-        locales \
-        git \
-        tmux \
-        apt-file \
-        build-essential \
-        file \
-        coreutils \
-        man \
-        ltrace \
-        nano \
-        gdb \
-        curl
-    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-  SHELL
+    config.vm.provision "shell", inline: <<-SHELL
+        export DEBIAN_FRONTEND="noninteractive"
+        apt-get update
+        apt-get upgrade -y
+        apt-get install -y \
+            locales \
+            git \
+            tmux \
+            apt-file \
+            build-essential \
+            file \
+            coreutils \
+            man \
+            ltrace \
+            nano \
+            gdb \
+            curl
+        localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+    SHELL
 
-  config.vm.provision "shell", privileged: false, inline: <<-SHELL
-    (
-      mkdir -p "${HOME}/src"
-      cd "${HOME}/src"
-      git clone https://github.com/Weltraumschaf/dotfiles.git
-      git clone https://github.com/Weltraumschaf/shell-scripts.git
-    )
-    (
-      cd "${HOME}/src/dotfiles"
-      ./install.sh
-    )
-    (
-      cd "${HOME}/src/shell-scripts"
-      ./install.sh
-    )
-  SHELL
+    config.vm.provision "shell", privileged: false, inline: <<-SHELL
+        (
+            mkdir -p "${HOME}/src"
+            cd "${HOME}/src"
+            git clone https://github.com/Weltraumschaf/dotfiles.git
+            git clone https://github.com/Weltraumschaf/shell-scripts.git
+        )
+
+        (
+            cd "${HOME}/src/dotfiles"
+        ./install.sh
+        )
+
+        (
+        cd "${HOME}/src/shell-scripts"
+        ./install.sh
+        )
+    SHELL
+
+    if Vagrant.has_plugin?("vagrant-vbguest")
+        config.vbguest.no_install = false
+    end
 end
