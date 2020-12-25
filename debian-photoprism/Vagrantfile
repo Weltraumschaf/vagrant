@@ -1,0 +1,34 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "debian/buster64"
+  config.vm.hostname = "debian-photoprism"
+  config.vm.network "public_network"
+  config.vm.network :forwarded_port, guest: 2342, host: 8080
+  config.disksize.size = "50GB"
+
+  config.vm.provision :shell, path: "../_scripts/install-linux-tools.sh"
+  config.vm.provision :shell, path: "../_scripts/install-docker.sh"
+  config.vm.provision :shell, path: "../_scripts/install-docker-compose.sh"
+  config.vm.provision "shell", inline: <<-SHELL
+    # To mount Samba.
+    apt-get install -y \
+      cifs-utils
+  SHELL
+
+  config.vm.provision :shell, privileged: false, path: "../_scripts/install-dotfiles.sh"
+  config.vm.provision :shell, privileged: false, path: "../_scripts/install-shell-scripts.sh"
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    curl -sSL \
+      https://dl.photoprism.org/docker/docker-compose.yml \
+      -o docker-compose.yml
+    sed -i 's|~/Pictures:/photoprism/originals|/mnt/Fotos:/photoprism/originals|' docker-compose.yml
+    echo 'alias mount-fotos="sudo mount -t cifs -o user=sxs,domain=KN5000 //alpha.kn5000.local/blackhole /mnt"' >> "${HOME}/.local_aliases"
+  SHELL
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "6144"
+  end
+
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.no_install = true
+  end
+end
