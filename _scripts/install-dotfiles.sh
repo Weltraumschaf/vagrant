@@ -16,10 +16,23 @@ source "${SCRIPT_DIR}/lib.sh"
 log "Executing '${0}' in ${SCRIPT_DIRECTORY} ..."
 log "Installing Dotfiles ..."
 
-(
-  mkdir -p "${HOME}/src"
-  cd "${HOME}/src"
-  git clone https://github.com/Weltraumschaf/dotfiles.git
-)
+install() {
+  (
+    mkdir -p "${HOME}/src"
+    cd "${HOME}/src"
+    git clone https://github.com/Weltraumschaf/dotfiles.git
+  )
 
-(cd "${HOME}/src/dotfiles" && ./install.sh)
+  (cd "${HOME}/src/dotfiles" && ./install.sh)
+}
+
+update() {
+  (cd "${HOME}/src/dotfiles" && ./uninstall.sh && ./install.sh)
+}
+
+if [[ -d "${HOME}/src/dotfiles" ]]; then
+  update
+else
+  install
+fi
+

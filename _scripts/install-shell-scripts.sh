@@ -16,10 +16,22 @@ source "${SCRIPT_DIR}/lib.sh"
 log "Executing '${0}' in ${SCRIPT_DIRECTORY} ..."
 log "Installing Shell scripts ..."
 
-(
-  mkdir -p "${HOME}/src"
-  cd "${HOME}/src"
-  git clone https://github.com/Weltraumschaf/shell-scripts.git
-)
+install() {
+  (
+    mkdir -p "${HOME}/src"
+    cd "${HOME}/src"
+    git clone https://github.com/Weltraumschaf/shell-scripts.git
+  )
 
-(cd "${HOME}/src/shell-scripts" && ./install.sh)
+  (cd "${HOME}/src/shell-scripts" && ./install.sh)
+}
+
+update() {
+  (cd "${HOME}/src/shell-scripts" && ./uninstall.sh && ./install.sh)
+}
+
+if [[ -d "${HOME}/src/shell-scripts" ]]; then
+  update
+else
+  install
+fi
