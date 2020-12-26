@@ -4,23 +4,30 @@ BOX_IMAGE = "debian/buster64"
 NODE_COUNT = 2
 
 Vagrant.configure("2") do |config|
-    config.vm.define "master" do |subconfig|
-        subconfig.vm.box = BOX_IMAGE
-        subconfig.vm.hostname = "master"
-        subconfig.vm.network :private_network, ip: "10.0.0.10"
-    end
+  $vagrant_dir = File.dirname(__FILE__)
+  $base_dir = File.dirname($vagrant_dir)
 
-    (1..NODE_COUNT).each do |i|
-        config.vm.define "node#{i}" do |subconfig|
-        subconfig.vm.box = BOX_IMAGE
-        subconfig.vm.hostname = "node#{i}"
-        subconfig.vm.network :private_network, ip: "10.0.0.#{i + 10}"
-        end
-    end
+  config.vm.define "master" do |subconfig|
+    subconfig.vm.box = BOX_IMAGE
+    subconfig.vm.hostname = "master"
+    subconfig.vm.network :private_network, ip: "10.0.0.10"
+  end
 
-    config.vm.provision :shell, path: "provision_as_root.sh"
-
-    if Vagrant.has_plugin?("vagrant-vbguest")
-        config.vbguest.no_install = false
+  (1..NODE_COUNT).each do |i|
+    config.vm.define "node#{i}" do |subconfig|
+      subconfig.vm.box = BOX_IMAGE
+      subconfig.vm.hostname = "node#{i}"
+      subconfig.vm.network :private_network, ip: "10.0.0.#{i + 10}"
     end
+  end
+
+  config.vm.synced_folder $vagrant_dir, "/vagrant", disabled: true
+  config.vm.synced_folder "#{$base_dir}", "/vagrant", type: "rsync", :mount_options => ["ro"]
+  config.vm.provision :shell, path: "#{$base_dir}/_scripts/upate-apt.sh"
+  config.vm.provision :shell, path: "#{$base_dir}/_scripts/install-linux-tools.sh"
+  config.vm.provision :shell, path: "#{$base_dir}/_scripts/install-docker.sh"
+
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.no_install = false
+  end
 end
