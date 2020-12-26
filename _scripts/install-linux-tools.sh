@@ -6,7 +6,7 @@ export DEBIAN_FRONTEND="noninteractive"
 
 # custom tools
 apt-get install -y \
-    git \
-    htop \
-    tree \
-    tmux
+  git \
+  htop \
+  tree \
+  tmux
