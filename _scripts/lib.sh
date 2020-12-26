@@ -10,7 +10,7 @@ if [[ "$(lsb_release -si)" == "Debian" ]]; then
   export DEBIAN_FRONTEND="noninteractive"
 fi
 
-LOG_PREFIX="VAGRANT "
+LOG_PREFIX="[VAGRANT]"
 
 ##
 ## Functions:
