@@ -6,9 +6,12 @@ set -euo pipefail
 [ -z "${SCRIPT_DIRECTORY:-}" ] \
   && SCRIPT_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-BASE_DIR=$(dirname "${SCRIPT_DIRECTORY}")
+SCRIPT_DIR=$(dirname "${SCRIPT_DIRECTORY}")
+PROJECT_DIR="/vagrant"
+SCRIPT_DIR="${PROJECT_DIR}/_scripts"
+
 # shellcheck source=lib.sh
-source "${BASE_DIR}/lib.sh"
+source "${SCRIPT_DIR}/lib.sh"
 
 # docker install
 apt-get install -y \
@@ -19,7 +22,7 @@ apt-get install -y \
   software-properties-common
 
 add_apt_key "https://download.docker.com/linux/debian/gpg"
-add_apt_source "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs)" "stable"
+add_apt_source "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable" "docker"
 
 apt-get update
 apt-get install -y \
