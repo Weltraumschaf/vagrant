@@ -12,6 +12,8 @@ SCRIPT_DIR="${PROJECT_DIR}/_scripts"
 
 # shellcheck source=lib.sh
 source "${SCRIPT_DIR}/lib.sh"
+log "Executing '${0}' in ${SCRIPT_DIRECTORY} ..."
+log "Installing Docker ..."
 
 # docker install
 apt-get install -y \

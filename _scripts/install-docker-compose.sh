@@ -6,14 +6,15 @@ set -euo pipefail
 [ -z "${SCRIPT_DIRECTORY:-}" ] \
   && SCRIPT_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
 
-log "Executing '${0}' in ${SCRIPT_DIRECTORY} ..."
-
 SCRIPT_DIR=$(dirname "${SCRIPT_DIRECTORY}")
 PROJECT_DIR="/vagrant"
 SCRIPT_DIR="${PROJECT_DIR}/_scripts"
 
 # shellcheck source=lib.sh
 source "${SCRIPT_DIR}/lib.sh"
+
+log "Executing '${0}' in ${SCRIPT_DIRECTORY} ..."
+log "Installing Docker Compose ..."
 
 # docker-compose install
 curl -sSL \

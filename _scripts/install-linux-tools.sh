@@ -14,6 +14,7 @@ SCRIPT_DIR="${PROJECT_DIR}/_scripts"
 source "${SCRIPT_DIR}/lib.sh"
 
 log "Executing '${0}' in ${SCRIPT_DIRECTORY} ..."
+log "Installing Linux tools ..."
 
 # custom tools
 apt-get install -y \

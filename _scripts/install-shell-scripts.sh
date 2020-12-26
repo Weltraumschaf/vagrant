@@ -14,6 +14,7 @@ SCRIPT_DIR="${PROJECT_DIR}/_scripts"
 source "${SCRIPT_DIR}/lib.sh"
 
 log "Executing '${0}' in ${SCRIPT_DIRECTORY} ..."
+log "Installing Shell scripts ..."
 
 (
   mkdir -p "${HOME}/src"
