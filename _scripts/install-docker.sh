@@ -8,7 +8,7 @@ set -euo pipefail
 
 BASE_DIR=$(dirname "${SCRIPT_DIRECTORY}")
 # shellcheck source=lib.sh
-source "${BASE_DIR}/_scripts/lib.sh"
+source "${BASE_DIR}/lib.sh"
 
 # docker install
 apt-get install -y \
@@ -18,12 +18,8 @@ apt-get install -y \
   gnupg-agent \
   software-properties-common
 
-curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
-
-add-apt-repository \
-  "deb [arch=amd64] https://download.docker.com/linux/debian \
-   $(lsb_release -cs) \
-   stable"
+add_apt_key "https://download.docker.com/linux/debian/gpg"
+add_apt_source "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs)" "stable"
 
 apt-get update
 apt-get install -y \
