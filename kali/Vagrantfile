@@ -1,20 +1,26 @@
 Vagrant.configure("2") do |config|
-    # https://www.kali.org/news/announcing-kali-for-vagrant/
+  $vagrant_dir = File.dirname(__FILE__)
+  $base_dir = File.dirname($vagrant_dir)
+  # https://www.kali.org/news/announcing-kali-for-vagrant/
 
-    config.vagrant.plugins = ["vagrant-vbguest"]
+  config.vagrant.plugins = ["vagrant-vbguest"]
 
-    # Every Vagrant development environment requires a box. You can search for
-    # boxes at https://vagrantcloud.com/search.
-    config.vm.box = "kalilinux/rolling"
-    # config.vm.box_check_update = false
-    config.vm.hostname = "kali-local"
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+  config.vm.box = "kalilinux/rolling"
+  # config.vm.box_check_update = false
+  config.vm.hostname = "kali-local"
 
-    config.vm.provider :virtualbox do |vb|
-        # Display the VirtualBox GUI when booting the machine
-        vb.gui = true
-        vb.memory = "4096"
-    end
+  config.vm.synced_folder $vagrant_dir, "/vagrant", disabled: true
+  config.vm.synced_folder "#{$base_dir}", "/vagrant", type: "rsync", :mount_options => ["ro"]
 
-    # https://stackoverflow.com/questions/18878117/using-vagrant-to-run-virtual-machines-with-desktop-environment
-    config.vm.provision :shell, path: "provision_as_root.sh"
+  config.vm.provision :shell, path: "#{$base_dir}/_scripts/upate-apt.sh"
+  # https://stackoverflow.com/questions/18878117/using-vagrant-to-run-virtual-machines-with-desktop-environment
+  config.vm.provision :shell, path: "provision_as_root.sh"
+
+  config.vm.provider :virtualbox do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    vb.gui = true
+    vb.memory = "4096"
+  end
 end
