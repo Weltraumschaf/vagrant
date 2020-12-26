@@ -21,4 +21,5 @@ apt-get install -y \
   git \
   htop \
   tree \
+  curl \
   tmux
