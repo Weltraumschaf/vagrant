@@ -5,8 +5,6 @@ set -eu
 export DEBIAN_FRONTEND="noninteractive"
 
 # docker install
-apt-get update
-apt-get upgrade -y
 apt-get install -y \
   apt-transport-https \
   ca-certificates \
