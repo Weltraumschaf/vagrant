@@ -1,0 +1,22 @@
+Vagrant.configure("2") do |config|
+  $vagrant_dir = File.dirname(__FILE__)
+  $base_dir = File.dirname($vagrant_dir)
+
+  config.vagrant.plugins = ["vagrant-vbguest"]
+
+  config.vm.box = "ubuntu/xenial64"
+  config.vm.hostname = "ubuntu-local"
+  
+  config.vm.synced_folder $vagrant_dir, "/vagrant", disabled: true
+  config.vm.synced_folder "#{$base_dir}", "/vagrant", type: "rsync", :mount_options => ["ro"]
+
+  config.vm.provision :shell, path: "#{$base_dir}/_scripts/upate-apt.sh"
+  config.vm.provision :shell, path: "provision_as_root.sh"
+  config.vm.boot_timeout = 300
+
+  config.vm.provider :virtualbox do |vb|
+    # Display the VirtualBox GUI when booting the machine
+    vb.gui = true
+    vb.memory = "4096"
+  end
+end
