@@ -1,0 +1,24 @@
+Vagrant.configure("2") do |config|
+  $vagrant_dir = File.dirname(__FILE__)
+  $base_dir = File.dirname($vagrant_dir)
+
+  config.vm.box = "debian/buster64"
+  config.vm.hostname = "portainer"
+  config.vm.network :forwarded_port, guest: 9000, host: 80
+
+  config.vm.synced_folder $vagrant_dir, "/vagrant", disabled: true
+  config.vm.synced_folder "#{$base_dir}", "/vagrant", type: "rsync", :mount_options => ["ro"]
+
+  config.vm.provision :shell, path: "#{$base_dir}/_scripts/upate-apt.sh"
+  config.vm.provision :shell, path: "#{$base_dir}/_scripts/install-linux-tools.sh"
+  config.vm.provision :shell, path: "#{$base_dir}/_scripts/install-docker.sh"
+  config.vm.provision :shell, path: "#{$base_dir}/_scripts/install-docker-compose.sh"
+  config.vm.provision :shell, path: "provision_as_root.sh"
+  
+  config.vm.provision :shell, privileged: false, path: "#{$base_dir}/_scripts/install-dotfiles.sh"
+  config.vm.provision :shell, privileged: false, path: "#{$base_dir}/_scripts/install-shell-scripts.sh"
+
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.no_install = true
+  end
+end
