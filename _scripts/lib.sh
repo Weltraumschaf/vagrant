@@ -2,6 +2,18 @@
 
 set -euo pipefail
 
+##
+## Varaibles:
+##
+
+if [[ "$(lsb_release -si)" == "Debian" ]]; then
+  export DEBIAN_FRONTEND="noninteractive"
+fi
+
+##
+## Functions:
+##
+
 add_apt_key() {
   local url="${1}"
   curl -fsSL "${url}" | apt-key add -

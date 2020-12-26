@@ -10,8 +10,6 @@ BASE_DIR=$(dirname "${SCRIPT_DIRECTORY}")
 # shellcheck source=lib.sh
 source "${BASE_DIR}/_scripts/lib.sh"
 
-export DEBIAN_FRONTEND="noninteractive"
-
 # custom tools
 apt-get install -y \
   git \
