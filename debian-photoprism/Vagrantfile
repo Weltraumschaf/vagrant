@@ -24,13 +24,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.provision :shell, privileged: false, path: "#{$base_dir}/_scripts/install-dotfiles.sh"
   config.vm.provision :shell, privileged: false, path: "#{$base_dir}/_scripts/install-shell-scripts.sh"
-  config.vm.provision :shell, privileged: false, inline: <<-SHELL
-    curl -sSL \
-      https://dl.photoprism.org/docker/docker-compose.yml \
-      -o docker-compose.yml
-    sed -i 's|~/Pictures:/photoprism/originals|/mnt/Fotos:/photoprism/originals|' docker-compose.yml
-  SHELL
-
+  config.vm.provision :file, source: "docker-compose.yml", destination: "docker-compose.yml"
   config.vm.provision :file, source: "start.sh", destination: "start.sh"
 
   config.vm.provider "virtualbox" do |vb|
