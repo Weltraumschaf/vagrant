@@ -10,7 +10,11 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "#{$base_dir}", "/vagrant", type: "rsync", :mount_options => ["ro"]
 
   config.vm.network :forwarded_port, guest: 2342, host: 8080
-  config.disksize.size = "50GB"
+
+  # https://askubuntu.com/questions/317338/how-can-i-increase-disk-size-on-a-vagrant-vm
+  # vagrant plugin install vagrant-disksize
+  # vagrant halt && vagrant up
+  config.disksize.size = '50GB'
 
   config.vm.provision :shell, path: "#{$base_dir}/_scripts/upate-apt.sh"
   config.vm.provision :shell, path: "#{$base_dir}/_scripts/install-linux-tools.sh"
