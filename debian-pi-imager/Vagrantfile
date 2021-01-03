@@ -10,17 +10,15 @@ Vagrant.configure("2") do |config|
   config.vagrant.plugins = ["vagrant-vbguest"]
 
   config.vm.box = "debian/testing64"
-  config.vm.hostname = "debian-local"
+  config.vm.hostname = "debian-pi-imager"
 
   config.vm.synced_folder "#{$vagrant_dir}", "/vagrant", disabled: true
   config.vm.synced_folder "#{$base_dir}", "/vagrant", type: "rsync", :mount_options => ["ro"]
-  # config.vm.synced_folder "#{ENV["HOME"]}/tmp", "/home/vagrant/host", type: "rsync", :mount_options => ["rw"]
+  config.vm.synced_folder "#{ENV["HOME"]}/src/private/image-specs", "/home/vagrant/src/image-specs", type: "rsync", :mount_options => ["rw"]
 
-  # Fails with grub error, needs `dpkg-reconfigure grub-pc`
-  # config.vm.provision :shell, path: "#{$base_dir}/_scripts/upate-apt.sh"
-  config.vm.provision :shell, inline: "apt-get update"
-  config.vm.provision :shell, path: "#{$base_dir}/_scripts/install-linux-tools.sh"
   config.vm.provision :shell, inline: <<-SHELL
+    export DEBIAN_FRONTEND="noninteractive"
+    apt-get update
     apt-get install -y \
       vmdb2 \
       dosfstools \
@@ -29,16 +27,6 @@ Vagrant.configure("2") do |config|
       time \
       kpartx \
       build-essential
-  SHELL
-
-  config.vm.provision :shell, privileged: false, path: "#{$base_dir}/_scripts/install-dotfiles.sh"
-  config.vm.provision :shell, privileged: false, path: "#{$base_dir}/_scripts/install-shell-scripts.sh"
-
-  config.vm.provision :shell, privileged: false, inline: <<-SHELL
-    (
-      cd "${HOME}/src" &&
-      git clone --recursive https://salsa.debian.org/raspi-team/image-specs.git
-    )
   SHELL
 
   if Vagrant.has_plugin?("vagrant-vbguest")
