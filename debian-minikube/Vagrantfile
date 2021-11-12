@@ -2,7 +2,7 @@ Vagrant.configure("2") do |config|
   $vagrant_dir = File.dirname(__FILE__)
   $base_dir = File.dirname($vagrant_dir)
 
-  config.vm.box = "debian/buster64"
+  config.vm.box = "debian/bullseye64"
   config.vm.hostname = "debian-minikube"
   config.vm.network "public_network"
 

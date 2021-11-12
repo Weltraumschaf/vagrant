@@ -9,7 +9,7 @@ Vagrant.configure("2") do |config|
 
   config.vagrant.plugins = ["vagrant-vbguest"]
 
-  config.vm.box = "debian/testing64"
+  config.vm.box = "debian/bullseye64"
   config.vm.hostname = "debian-pi-imager"
 
   config.vm.synced_folder "#{$vagrant_dir}", "/vagrant", disabled: true
