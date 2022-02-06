@@ -23,11 +23,11 @@ install() {
     git clone https://github.com/Weltraumschaf/dotfiles.git
   )
 
-  (cd "${HOME}/src/dotfiles" && ./install.sh)
+  (cd "${HOME}/src/dotfiles" && ./bin/install.sh)
 }
 
 update() {
-  (cd "${HOME}/src/dotfiles" && ./uninstall.sh && ./install.sh)
+  (cd "${HOME}/src/dotfiles" && ./bin/uninstall.sh && ./bin/install.sh)
 }
 
 if [[ -d "${HOME}/src/dotfiles" ]]; then
@@ -35,4 +35,3 @@ if [[ -d "${HOME}/src/dotfiles" ]]; then
 else
   install
 fi
-
