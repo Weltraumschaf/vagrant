@@ -2,7 +2,7 @@
 
 Some Vagrant boxes for my personal use.
 
-Vagrant VirutlaBox Guest Additions:
+Vagrant VirtualBox Guest Additions:
 
 ```bash
 vagrant plugin install vagrant-vbguest
